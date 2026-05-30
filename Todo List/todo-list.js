@@ -1,10 +1,16 @@
-const todoList = [{
+const todoList = JSON.parse(localStorage.getItem('todoList')) || [{
+    name: 'create your first task',
+    dueDate: '2026-12-22'
+}];
+
+/*[{
     name: 'make dinner',
     dueDate: '2026-12-22'
 }, {
     name: 'train calisthenics',
     dueDate: '2026-10-22'
 }];
+*/
 
 renderTodoList();
 
@@ -45,6 +51,8 @@ function addTodo() {
         name,
         dueDate
     });
+
+    localStorage.setItem('todoList', JSON.stringify(todoList));
 
     inputElement.value = '';
 
