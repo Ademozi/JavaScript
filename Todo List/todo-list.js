@@ -26,10 +26,8 @@ function renderTodoList() {
         const html = `
         <div>${name}</div>
         <div>${dueDate}</div>
-        <button onclick="
-        todoList.splice(${i}, 1);
-        renderTodoList();"
-        class='delete-todo-button'
+        <button class='delete-todo-button 
+        js-delete-todo-button'
         >Delete</button>
         `;
 
@@ -37,8 +35,25 @@ function renderTodoList() {
     }
 
     document.querySelector('.js-todo-list')
-    .innerHTML = todoListHTML;
+        .innerHTML = todoListHTML;
+
+    // we have to do it after putting the HTML code on the page
+    // to select all the buttons, 
+    // because querySelector give us only the first one
+    document.querySelectorAll('.js-delete-todo-button')
+        .forEach((deleteButton, index) => {
+            deleteButton.addEventListener('click', () => {
+                todoList.splice(index, 1);
+                renderTodoList();
+            });
+        });
+
 }
+
+document.querySelector('.js-add-todo-button')
+    .addEventListener('click', () => {
+        addTodo();
+    });
 
 function addTodo() {
     const inputElement = document.querySelector('.js-name-input');
