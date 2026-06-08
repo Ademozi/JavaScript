@@ -1,9 +1,24 @@
 // import the cart variable from cart.js
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
+import { products } from "../data/products.js";
 
 
 // using this variable to combine the hmtl code into one variable
 let productsHTML = '';
+
+// We're going to use an object to save the timeout ids.
+// The reason we use an object is because each product
+// will have its own timeoutId. So an object lets us
+// save multiple timeout ids for different products.
+// For example:
+// {
+//   'product-id1': 2,
+//   'product-id2': 5,
+//   ...
+// }
+// (2 and 5 are ids that are returned when we call setTimeout).
+const addedMessageTimeouts = {};
+
 
 products.forEach((product) => {
     productsHTML += `
@@ -64,18 +79,20 @@ document.querySelector('.js-products-grid')
     .innerHTML = productsHTML;
 
 
-// We're going to use an object to save the timeout ids.
-// The reason we use an object is because each product
-// will have its own timeoutId. So an object lets us
-// save multiple timeout ids for different products.
-// For example:
-// {
-//   'product-id1': 2,
-//   'product-id2': 5,
-//   ...
-// }
-// (2 and 5 are ids that are returned when we call setTimeout).
-const addedMessageTimeouts = {};
+
+
+function updateCartQuantity() {
+
+    let cartQuantity = 0;
+
+    cart.forEach((cartItem) => {
+        cartQuantity += cartItem.quantity;
+    })
+
+    document.querySelector('.js-cart-quantity')
+        .innerHTML = cartQuantity;
+}
+
 
 
 document.querySelectorAll('.js-add-to-cart')
@@ -83,48 +100,17 @@ document.querySelectorAll('.js-add-to-cart')
         button.addEventListener('click', () => {
             // .dataset gives us all the data attributes
             //  attached to the HTML element
-            const {productId} = button.dataset;
             // desctructuring shortcut
             // same as: const productId = button.dataset.productId;
-
-            let matchingItem;
+            const {productId} = button.dataset;
+            
 
             // to get the selected quantity
             const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
             const quantity = Number(quantitySelector.value);
 
-            // check if the product is already in the cart
-            cart.forEach((item) => {
-                if (productId === item.productId) {
-                    matchingItem = item;
-                }
-            });
-
-            // if it in the cart, increase the quantity
-            if (matchingItem) {
-                matchingItem.quantity += quantity;
-            } else {
-
-                // if it is not in the cart, add it to the cart
-                cart.push({
-                    productId, // shorthand property
-                    quantity
-                });
-                // same as: productId = productId
-                // quantity = quantity
-                    
-            }
-
-            let cartQuantity = 0;
-
-            cart.forEach((item) => {
-                cartQuantity += item.quantity;
-            })
-
-            document.querySelector('.js-cart-quantity')
-                .innerHTML = cartQuantity;
-
-
+            addToCart(productId, quantity);
+            updateCartQuantity();
 
             //-----------------------------------------------
             //Add to cart Message
