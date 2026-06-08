@@ -1,3 +1,7 @@
+// import the cart variable from cart.js
+import { cart } from "../data/cart.js";
+
+
 // using this variable to combine the hmtl code into one variable
 let productsHTML = '';
 
