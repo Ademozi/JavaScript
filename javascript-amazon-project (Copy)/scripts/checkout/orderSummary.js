@@ -148,6 +148,7 @@ document.querySelectorAll('.js-delivery-option')
       const {productId, deliveryOptionId} = element.dataset;
       updateDeliveryOption(productId, deliveryOptionId);
       renderOrderSummary();
+      renderPaymentSummary();
     });
   });
 }
