@@ -1,18 +1,19 @@
 class Cart {
     cartItems; // same as: cartItems = undefined;
-    localStorageKey; // same as: localStorageKey = undefined;
+    #localStorageKey; // same as: localStorageKey = undefined;
+    // the # makes the localStorageKey property private, which means it cannot be accessed outside of the Cart class
 
     // every time we create a new instance of the Cart class, the constructor function will run
     constructor(localStorageKey) {
         // set the localStorageKey for each instance
-        this.localStorageKey = localStorageKey;
+        this.#localStorageKey = localStorageKey;
 
         // load the cart items from local storage for each instance
-        this.loadFromStorage();
+        this.#loadFromStorage();
     }
 
-    loadFromStorage() {
-        this.cartItems = JSON.parse(localStorage.getItem(this.localStorageKey));
+    #loadFromStorage() {
+        this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
 
         if (!this.cartItems) {
             this.cartItems = [{
@@ -28,7 +29,7 @@ class Cart {
         };
 
         saveToStorage() {
-            localStorage.setItem(this.localStorageKey, JSON.stringify(this.cartItems));
+            localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
         };
 
         addToCart(productId, quantity=1) {
